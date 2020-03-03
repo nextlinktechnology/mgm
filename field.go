@@ -1,20 +1,21 @@
 package mgm
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // IDField struct contain model's ID field.
 type IDField struct {
-	ID primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	MongoID primitive.ObjectID `json:"mongo_id" bson:"_id,omitempty"`
 }
 
 // DateFields struct contain `created_at` and `updated_at`
 // fields that autofill on insert/update model.
 type DateFields struct {
-	CreatedAt time.Time `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
+	MongoCreatedAt time.Time `json:"mongo_created_at" bson:"_created_at"`
+	MongoUpdatedAt time.Time `json:"mongo_updated_at" bson:"_updated_at"`
 }
 
 // PrepareID method prepare id value to using it as id in filtering,...
@@ -30,12 +31,12 @@ func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
 
 // GetID method return model's id
 func (f *IDField) GetID() interface{} {
-	return f.ID
+	return f.MongoID
 }
 
 // SetID set id value of model's id field.
 func (f *IDField) SetID(id interface{}) {
-	f.ID = id.(primitive.ObjectID)
+	f.MongoID = id.(primitive.ObjectID)
 }
 
 //--------------------------------
@@ -45,13 +46,13 @@ func (f *IDField) SetID(id interface{}) {
 // Creating hook used here to set `created_at` field
 // value on inserting new model into database.
 func (f *DateFields) Creating() error {
-	f.CreatedAt = time.Now().UTC()
+	f.MongoCreatedAt = time.Now().UTC()
 	return nil
 }
 
 // Saving hook used here to set `updated_at` field value
 // on create/update model.
 func (f *DateFields) Saving() error {
-	f.UpdatedAt = time.Now().UTC()
+	f.MongoUpdatedAt = time.Now().UTC()
 	return nil
 }

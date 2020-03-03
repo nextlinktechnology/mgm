@@ -2,13 +2,14 @@ package mgm_test
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/Kamva/mgm/v3"
 	"github.com/Kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"testing"
 )
 
 type Person struct {
@@ -173,7 +174,7 @@ func TestReturnErrorInUpdatingHook(t *testing.T) {
 
 	// Expected do not update this model:
 	oldPerson := &Person{}
-	util.PanicErr(mgm.Coll(person).FindByID(person.ID, oldPerson))
+	util.PanicErr(mgm.Coll(person).FindByID(person.MongoID, oldPerson))
 	require.Equal(t, oldName, oldPerson.Name, "Expected person's name be %s name, but is %s", oldName, person.Name)
 }
 
@@ -198,7 +199,7 @@ func TestUpdatingDocHooks(t *testing.T) {
 
 	// Expected do not update this model:
 	newPerson := &Person{}
-	util.PanicErr(mgm.Coll(person).FindByID(person.ID, newPerson))
+	util.PanicErr(mgm.Coll(person).FindByID(person.MongoID, newPerson))
 	require.Equal(t, newName, newPerson.Name, "Expected person's name be %s , but is %s", newName, person.Name)
 }
 

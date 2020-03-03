@@ -11,7 +11,7 @@ func seed() {
 	author := newAuthor("Mehran")
 	_ = mgm.Coll(author).Create(author)
 
-	book := newBook("Test", 124, author.ID)
+	book := newBook("Test", 124, author.MongoID)
 	_ = mgm.Coll(book).Create(book)
 
 }

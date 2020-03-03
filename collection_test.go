@@ -1,6 +1,8 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/Kamva/mgm/v3"
 	"github.com/Kamva/mgm/v3/builder"
 	"github.com/Kamva/mgm/v3/internal/util"
@@ -8,7 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"testing"
 )
 
 func TestFindByIdWithInvalidId(t *testing.T) {
@@ -27,7 +28,7 @@ func TestFindFirst(t *testing.T) {
 	d := &Doc{}
 	util.AssertErrIsNil(t, mgm.Coll(&Doc{}).First(bson.M{}, d))
 
-	require.NotEqual(t, primitive.ObjectID{}, d.ID)
+	require.NotEqual(t, primitive.ObjectID{}, d.MongoID)
 }
 
 func TestCollection_Create(t *testing.T) {
@@ -39,11 +40,11 @@ func TestCollection_Create(t *testing.T) {
 	util.AssertErrIsNil(t, mgm.Coll(doc).Create(doc))
 
 	// Inserted model's id should not be nil:
-	require.NotNil(t, doc.ID, "Expected document having id after insertion, got nil")
+	require.NotNil(t, doc.MongoID, "Expected document having id after insertion, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	util.AssertErrIsNil(t, mgm.Coll(doc).FindByID(doc.ID, foundDoc))
+	util.AssertErrIsNil(t, mgm.Coll(doc).FindByID(doc.MongoID, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -64,7 +65,7 @@ func TestCollection_Update(t *testing.T) {
 	// Find that doc again:
 	newFound := findDoc(t)
 
-	if found.ID != newFound.ID {
+	if found.MongoID != newFound.MongoID {
 		panic("two fond document dont have same id!")
 	}
 	require.Equal(t, found.Name, newFound.Name)
@@ -83,7 +84,7 @@ func TestCollection_Delete(t *testing.T) {
 	// Find that doc again:
 	newFound := findDoc(t)
 
-	require.NotEqual(t, found.ID, newFound.ID)
+	require.NotEqual(t, found.MongoID, newFound.MongoID)
 }
 
 func TestCollection_SimpleFind(t *testing.T) {
