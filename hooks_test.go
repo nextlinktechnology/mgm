@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Kamva/mgm/v3"
-	"github.com/Kamva/mgm/v3/internal/util"
+	"github.com/nextlinktechnology/mgm/v3"
+	"github.com/nextlinktechnology/mgm/v3/internal/util"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"

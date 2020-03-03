@@ -1,7 +1,7 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm/v3/internal/util"
+	"github.com/nextlinktechnology/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
